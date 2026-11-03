@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфоліо - СТО та автосервіс</title>
+</head>
+<body>
+
+    <header>
+        <h1>Автосервіс МоторЛайн</h1>
+        <nav>
+            <a href="#about">Про нас</a>
+            <a href="#projects">Проєкти</a>
+            <a href="#contact">Контакти</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>Про нас</h2>
+            <img src="servis.jpg" alt="Сучасний цех автосервісу МоторЛайн із підйомниками та автомобілями в роботі" width="400">
+            <p>
+                Привіт! Ми — команда автосервісу «МоторЛайн», яка спеціалізується 
+                на комп'ютерній діагностиці, ремонті двигунів та ходової частини 
+                автомобілів. На цьому сайті ми ділимося інформацією про наші послуги, 
+                досвід роботи та допомагаємо клієнтам підтримувати автівки в ідеальному стані.
+            </p>
+            <ul>
+                <li>Комп'ютерна діагностика та ремонт електроніки</li>
+                <li>Ремонт ходової частини, підвіски та гальмівних систем</li>
+                <li>Регламентне технічне обслуговування та заміна мастила</li>
+            </ul>
+        </section>
+
+        <section id="projects">
+            <h2>Проєкти</h2>
+
+            <article>
+                <h3>Комп'ютерна діагностика</h3>
+                <p>
+                    Повна перевірка електронних систем автомобіля, 
+                    зчитування та розшифровка кодів помилок. 
+                    Використовуємо професійні сканери Launch та Autel.
+                </p>
+            </article>
+
+            <article>
+                <h3>Ремонт ходової частини</h3>
+                <p>
+                    Заміна амортизаторів, пружин, важелів та сайлентблоків. 
+                    Працюємо на підйомниках з використанням спецінструменту 
+                    та оригінальних запчастин.
+                </p>
+            </article>
+
+            <article>
+                <h3>Заміна мастила та ТО</h3>
+                <p>
+                    Регламентна заміна моторної оливи, фільтрів та технічних рідин. 
+                    Використовуємо тільки сертифіковані витратні матеріали 
+                    від перевірених брендів.
+                </p>
+            </article>
+        </section>
+
+                <section id="contact">
+            <h2>Контакти</h2>
+            <p>Залиште заявку на ремонт — і ми зв'яжемося з вами найближчим часом!</p>
+
+            <form action="#" method="post">
+                <label for="name">Ім'я *</label><br>
+                <input type="text" id="name" name="name"
+                       required minlength="2" maxlength="50"><br><br>
+
+                <label for="email">Електронна пошта *</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="topic">Тема звернення *</label><br>
+                <select id="topic" name="topic" required>
+                    <option value="" disabled selected>Оберіть тему</option>
+                    <option value="diagnostics">Комп'ютерна діагностика</option>
+                    <option value="repair">Ремонт ходової</option>
+                    <option value="maintenance">Заміна мастила / ТО</option>
+                    <option value="other">Інше питання</option>
+                </select><br><br>
+
+                <label for="message">Повідомлення *</label><br>
+                <textarea id="message" name="message"
+                          required maxlength="500" rows="5"></textarea><br><br>
+
+                <button type="submit">Надіслати</button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено.</p>
+    </footer>
+
+</body>
+</html>
