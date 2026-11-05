@@ -1,0 +1,166 @@
+/* 1. Базове скидання стилів (CSS Reset) */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+/* 2. Оголошення глобальних CSS-змінних */
+:root {
+    --color-primary: #1f3b57;
+    --color-accent: #334155; 
+    --color-bg: #ffffff;
+    --color-text: #27303a;
+    --color-muted: #6b7684;
+    --font-heading: Georgia, serif;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+}
+
+/* 3. Базові стилі сторінки та макета */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.5;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+section {
+    margin-bottom: var(--spacing-lg);
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+}
+
+ul, ol {
+    padding-left: 20px;
+    margin-bottom: var(--spacing-md);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: var(--spacing-md);
+}
+
+footer {
+    background-color: var(--color-primary);
+    color: white;
+    text-align: center;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+/* 4. Шапка (header) та навігація (nav) */
+header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+nav a {
+    color: var(--color-accent);
+    text-decoration: none;
+    margin-right: var(--spacing-md);
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+nav a:focus {
+    outline: 2px dashed var(--color-accent);
+    outline-offset: 4px;
+}
+
+/* 5. Типографіка заголовків */
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+}
+
+header h1 {
+    color: white;
+    margin-bottom: var(--spacing-sm);
+}
+
+h2 {
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: var(--spacing-sm);
+}
+
+h3 {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* 6. Стилізування форми зворотного зв'язку */
+form br {
+    display: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--color-muted);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--color-accent);
+    outline: none;
+}
+
+button {
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+/* 7. Картки проєктів */
+#projects article {
+    background-color: var(--color-bg);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    transition: box-shadow 0.2s ease;
+}
+
+#projects article:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
