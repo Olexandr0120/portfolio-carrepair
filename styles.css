@@ -1,13 +1,14 @@
 /* 1. Базове скидання стилів (CSS Reset) */
 * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
+
 /* 2. Оголошення глобальних CSS-змінних */
 :root {
-    --color-primary: #1f3b57;
-    --color-accent: #334155; 
+    --color-primary: #f1f5f9; 
+    --color-accent: #334155;  
     --color-bg: #ffffff;
     --color-text: #27303a;
     --color-muted: #6b7684;
@@ -15,6 +16,7 @@ padding: 0;
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 32px;
+    --radius: 8px;
 }
 
 /* 3. Базові стилі сторінки та макета */
@@ -24,8 +26,9 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
 }
+
 main {
-    max-width: 960px;
+    max-width: 1100px; /* Збільшено для ЛР4 */
     margin: 0 auto;
     padding: var(--spacing-lg);
 }
@@ -46,58 +49,70 @@ ul, ol {
 img {
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: var(--radius);
     margin-bottom: var(--spacing-md);
 }
 
 footer {
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-text); 
     text-align: center;
     padding: var(--spacing-md);
     margin-top: var(--spacing-lg);
 }
 
-/* 4. Шапка (header) та навігація (nav) */
+footer p {
+    margin-bottom: 0;
+}
+
+/* 4. Шапка (header) та навігація (nav) - Mobile-First */
 header {
     background-color: var(--color-primary);
-    color: white;
-    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--color-text); 
+    padding: var(--spacing-lg); 
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+header h1 {
+    color: var(--color-text);
+    margin-bottom: 0;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
 }
 
 nav a {
-    color: var(--color-accent);
+    color: var(--color-accent); 
     text-decoration: none;
-    margin-right: var(--spacing-md);
     font-weight: bold;
     transition: color 0.2s ease;
 }
 
 nav a:hover {
-    color: white;
+    color: var(--color-text); 
     text-decoration: underline;
 }
 
 nav a:focus {
-    outline: 2px dashed var(--color-accent);
+    outline: 2px dashed var(--color-accent); 
     outline-offset: 4px;
 }
 
 /* 5. Типографіка заголовків */
 h1, h2, h3 {
     font-family: var(--font-heading);
-    color: var(--color-primary);
-}
-
-header h1 {
-    color: white;
-    margin-bottom: var(--spacing-sm);
+    color: var(--color-text); 
 }
 
 h2 {
     margin-top: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
-    border-bottom: 2px solid var(--color-accent);
+    border-bottom: 2px solid var(--color-accent); 
     padding-bottom: var(--spacing-sm);
 }
 
@@ -119,7 +134,7 @@ label {
 input, select, textarea {
     display: block;
     width: 100%;
-    max-width: 400px;
+    max-width: 100%; 
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-md);
     border: 1px solid var(--color-muted);
@@ -132,10 +147,11 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     border-color: var(--color-accent);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.2);
 }
 
 button {
-    background-color: var(--color-accent);
+    background-color: var(--color-accent); 
     color: white;
     border: none;
     padding: var(--spacing-sm) var(--spacing-lg);
@@ -151,16 +167,60 @@ button:hover {
     opacity: 0.85;
 }
 
-/* 7. Картки проєктів */
+/* 7. Картки проєктів (Flexbox) */
+.projects-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
 #projects article {
+    flex: 1 1 250px;
     background-color: var(--color-bg);
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: var(--radius);
     padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
     transition: box-shadow 0.2s ease;
 }
 
 #projects article:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Форма в один рядок на десктопі */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.form-row input {
+    margin-bottom: 0;
+}
+
+/* 8. Медіазапит для планшетів та десктопів (Брейкпоінт 700px) */
+@media (min-width: 700px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav {
+        flex-direction: row;
+        gap: var(--spacing-md);
+    }
+
+ nav a {
+        white-space: nowrap; 
+    }
+
+    .form-row {
+        flex-direction: row;
+    }
+
+    .form-row > div {
+        flex: 1;
+    }
 }
