@@ -1,0 +1,194 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-bg, #ffffff);
+    color: var(--color-text, #27303a);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* 3. Каркас сторінки (Mobile-First) */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: 
+        "header"
+        "sidebar"
+        "main"
+        "footer";
+    min-height: 100vh;
+    gap: 16px;
+}
+
+.layout__header { grid-area: header; }
+.layout__sidebar { grid-area: sidebar; }
+.layout__footer { grid-area: footer; }
+.layout__main { 
+    grid-area: main; 
+    max-width: none;
+    margin: 0;
+    padding: 0 16px 16px;
+}
+
+/* 4. Оформлення шапки, підвалу та сайдбару */
+.layout__header, 
+.layout__footer {
+    background-color: var(--color-primary, #f1f5f9);
+    color: var(--color-text, #27303a);
+    padding: 16px 24px;
+}
+
+.layout__header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.layout__footer p {
+    margin: 0;
+}
+
+.layout__sidebar {
+    background-color: #ffffff;
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.layout__sidebar nav {
+    display: block;
+}
+
+.layout__sidebar ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.layout__sidebar a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: var(--color-accent, #334155);
+    font-weight: 600;
+    text-decoration: none;
+    background-color: var(--color-bg, #ffffff);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.layout__sidebar a:hover,
+.layout__sidebar a:focus {
+    background-color: var(--color-accent, #334155);
+    color: #ffffff;
+    outline: none;
+}
+
+/* 5. Сітка карток на мобільному екрані */
+.cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h2 {
+    margin: 0 0 12px;
+    padding: 0;
+    border-bottom: none;
+    font-size: 1rem;
+    color: var(--color-accent, #334155);
+}
+
+.card__value {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-accent, #334155);
+}
+
+.card__note {
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+    color: #6b7684;
+}
+
+/* 6. Діаграма */
+.chart {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    align-items: end;
+    gap: 10px;
+    height: 160px;
+    padding-top: 12px;
+}
+
+.chart span {
+    height: var(--h);
+    background-color: var(--color-accent, #334155);
+    border-radius: 6px 6px 0 0;
+    transition: opacity 0.2s ease;
+}
+
+.chart span:hover {
+    opacity: 0.8;
+}
+
+/* 7. Планшетний брейкпоінт (800px, панель праворуч) */
+@media (min-width: 800px) {
+    .layout {
+        grid-template-columns: 1fr 240px;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas: 
+            "header header"
+            "main sidebar"
+            "footer footer";
+    }
+    .layout__sidebar {
+        border-bottom: none;
+        border-left: 1px solid #e0e0e0;
+    }
+    .layout__main {
+        padding: 0 0 16px 16px;
+    }
+    .layout__sidebar ul {
+        grid-template-columns: 1fr;
+    }
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-auto-rows: minmax(140px, auto);
+        grid-auto-flow: dense;
+    }
+    .card--wide {
+        grid-column: span 2;
+    }
+    .card--tall {
+        grid-row: span 2;
+    }
+}
+
+/* 8. Десктопний брейкпоінт (1200px) */
+@media (min-width: 1200px) {
+    .layout {
+        max-width: 1400px;
+        margin-inline: auto;
+        grid-template-columns: 1fr 280px;
+    }
+    .cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

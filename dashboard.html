@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дашборд – Облік заявок СТО</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="layout">
+        <header class="layout__header">
+            <h1>Дашборд: Облік заявок на ремонт та запчастин</h1>
+        </header>
+        
+        <aside class="layout__sidebar">
+            <nav aria-label="Розділи дашборду">
+                <ul>
+                    <li><a href="#">Огляд</a></li>
+                    <li><a href="#">Замовлення</a></li>
+                    <li><a href="#">Склад</a></li>
+                    <li><a href="index.html">До портфоліо</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="layout__main">
+            <section class="cards" aria-label="Ключові показники">
+                <!-- 1. Широка картка з діаграмою (span 2) -->
+                <article class="card card--wide">
+                    <h2>Динаміка заявок за тиждень</h2>
+                    <div class="chart" role="img" aria-label="Стовпчикова діаграма заявок за сім днів">
+                        <span style="--h: 45%" title="Пн: 45"></span>
+                        <span style="--h: 65%" title="Вт: 65"></span>
+                        <span style="--h: 55%" title="Ср: 55"></span>
+                        <span style="--h: 80%" title="Чт: 80"></span>
+                        <span style="--h: 95%" title="Пт: 95"></span>
+                        <span style="--h: 100%" title="Сб: 100"></span>
+                        <span style="--h: 75%" title="Нд: 75"></span>
+                    </div>
+                </article>
+                
+                <!-- 2. Висока картка (span 2) -->
+                <article class="card card--tall">
+                    <h2>Задоволеність клієнтів</h2>
+                    <p class="card__value">4,9 ★</p>
+                    <p class="card__note">Середня оцінка якості ремонту за відгуками клієнтів за місяць</p>
+                </article>
+                
+                <!-- 3-8. Звичайні картки -->
+                <article class="card">
+                    <h2>Виконано ремонтів</h2>
+                    <p class="card__value">142</p>
+                </article>
+                <article class="card">
+                    <h2>Запчастини на складі</h2>
+                    <p class="card__value">348 шт.</p>
+                </article>
+                <article class="card">
+                    <h2>Активні заявки</h2>
+                    <p class="card__value">12</p>
+                </article>
+                <article class="card">
+                    <h2>Середній час ремонту</h2>
+                    <p class="card__value">2,5 год</p>
+                </article>
+                <article class="card">
+                    <h2>Нових клієнтів</h2>
+                    <p class="card__value">18</p>
+                </article>
+                <article class="card">
+                    <h2>Виручка за місяць</h2>
+                    <p class="card__value">85 000 ₴</p>
+                </article>
+            </section>
+        </main>
+        
+        <footer class="layout__footer">
+            <p>© 2026 Варакута О.О. · Група КІ-24-1 · Лабораторна робота № 5</p>
+        </footer>
+    </div>
+</body>
+</html>
