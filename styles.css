@@ -223,4 +223,48 @@ button:hover {
     .form-row > div {
         flex: 1;
     }
+    /* == Стилі для Лабораторної роботи № 6 (Конвертер і Каталог) == */
+#conv-result,
+#summary {
+    margin-top: var(--spacing-md, 16px);
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+    background-color: #f8fafc;
+    border-left: 4px solid var(--color-accent, #334155);
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm, 8px);
+    margin-bottom: var(--spacing-md, 16px);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: var(--color-accent, #334155);
+    color: #ffffff;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
 }

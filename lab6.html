@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript: логіка та дані – ЛР6</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="lab6.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Автосервіс МоторЛайн – Лабораторна робота № 6</h1>
+        <nav>
+            <a href="index.html">Головна (Портфоліо)</a>
+            <a href="dashboard.html">Дашборд</a>
+            <a href="lab6.html">Конвертер і каталог</a>
+        </nav>
+    </header>
+    <main>
+        <section id="converter-section" aria-labelledby="conv-title">
+            <h2 id="conv-title">Конвертер швидкості</h2>
+            <form id="converter">
+                <div class="form-row">
+                    <div>
+                        <label for="value">Значення</label>
+                        <input id="value" type="text" inputmode="decimal" placeholder="Наприклад, 5,5" />
+                    </div>
+                    <div>
+                        <label for="from">З одиниці</label>
+                        <select id="from"></select>
+                    </div>
+                    <div>
+                        <label for="to">В одиницю</label>
+                        <select id="to"></select>
+                    </div>
+                </div>
+                <button type="submit">Перетворити</button>
+            </form>
+            <p id="conv-result" role="status"></p>
+        </section>
+
+        <section id="catalog-section" aria-labelledby="data-title">
+            <h2 id="data-title">Каталог автотоварів</h2>
+            <div class="toolbar">
+                <button type="button" data-action="all">Усі</button>
+                <button type="button" data-action="expensive">Дорожчі за 1000</button>
+                <button type="button" data-action="available">Лише в наявності</button>
+                <button type="button" data-action="sort-asc">Ціна ↑</button>
+                <button type="button" data-action="sort-desc">Ціна ↓</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Ціна</th>
+                            <th>Зі знижкою</th>
+                            <th>К-сть</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-body"></tbody>
+                </table>
+            </div>
+            <p id="summary"></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено.</p>
+    </footer>
+</body>
+</html>
