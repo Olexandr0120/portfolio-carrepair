@@ -1,0 +1,220 @@
+/* === Стилі компонента To-Do List (ЛР № 7) === */
+.todo {
+    max-width: 720px;
+    margin: var(--spacing-lg, 24px) auto;
+    padding: 0 var(--spacing-md, 16px);
+}
+
+.todo-card {
+    background-color: var(--color-surface, #ffffff);
+    padding: var(--spacing-lg, 24px);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Форма додавання завдання */
+#todo-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+#todo-form label {
+    flex-basis: 100%;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+#todo-form input[type="text"], 
+#todo-form select {
+    margin-bottom: 0;
+    padding: 8px 12px;
+}
+
+#todo-text {
+    flex: 1 1 240px;
+    max-width: none;
+}
+
+#todo-category {
+    flex: 0 1 160px;
+    width: auto;
+}
+
+/* Повідомлення про помилку валідації */
+.error {
+    color: #b42318;
+    font-weight: 600;
+    min-height: 1.5em;
+    margin: 8px 0;
+}
+
+/* Панель фільтрів та додаткових інструментів */
+.todo-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0 16px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filters button {
+    background-color: #e2e8f0;
+    color: var(--color-text, #1e293b);
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filters button.is-active {
+    background-color: var(--color-accent, #334155);
+    color: #ffffff;
+}
+
+#clear-done {
+    background-color: #64748b;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    margin-left: auto;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+#clear-done:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Список завдань (CSS Grid) */
+#todo-list {
+    list-style: none;
+    margin: 0 0 16px 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+#todo-list li {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background-color: #ffffff;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    margin-bottom: 0;
+}
+
+#todo-list input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--color-accent, #334155);
+    flex-shrink: 0;
+}
+
+#todo-list .text {
+    flex: 1 1 auto;
+    min-width: 150px;
+    overflow-wrap: anywhere;
+}
+
+#todo-list .meta {
+    font-size: 0.8rem;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#todo-list li button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+#todo-list li button[data-action="edit"],
+#todo-list li button[data-action="save"] {
+    background-color: var(--color-accent, #334155);
+}
+
+#todo-list li button[data-action="delete"],
+#todo-list li button[data-action="cancel"] {
+    background-color: #64748b;
+}
+
+#todo-list li.is-done .text {
+    text-decoration: line-through;
+    color: #6b7684;
+}
+
+#todo-list li.empty {
+    color: #6b7684;
+    justify-content: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+#todo-counter {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+/* Адаптація для мобільних екранів */
+@media (max-width: 600px) {
+    /* Дозволяємо елементам картки переноситися на новий рядок */
+    #todo-list li {
+        flex-wrap: wrap;
+    }
+
+    /* Текст завдання займає всю ширину картки */
+    #todo-list .text {
+        flex: 1 1 100%;
+        margin-bottom: 5px;
+    }
+
+    /* Кнопки та бейдж стають в один рядок під текстом */
+    #todo-list .meta {
+        flex: 1 1 auto;
+        margin-bottom: 5px;
+    }
+
+    #todo-list li button {
+        flex: 1 1 auto;
+        margin-top: 5px;
+    }
+
+    /* Форма також стає в колонку */
+    #todo-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #todo-text,
+    #todo-category,
+    #todo-form button[type="submit"] {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}

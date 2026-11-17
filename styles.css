@@ -25,12 +25,17 @@ body {
     line-height: 1.5;
     background-color: var(--color-bg);
     color: var(--color-text);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 main {
-    max-width: 1100px; /* Збільшено для ЛР4 */
+    max-width: 1100px; 
     margin: 0 auto;
     padding: var(--spacing-lg);
+    flex: 1;
 }
 
 section {

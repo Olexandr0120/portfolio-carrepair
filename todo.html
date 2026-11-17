@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List - ЛР7</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="todo.css" />
+    <script src="todo.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Автосервіс МоторЛайн – Лабораторна робота № 7</h1>
+        <nav>
+            <a href="index.html">Головна (Портфоліо)</a>
+            <a href="dashboard.html">Дашборд</a>
+            <a href="lab6.html">Конвертер і каталог</a>
+            <a href="todo.html">Список задач</a>
+        </nav>
+    </header>
+    
+    <main class="todo">
+        <section class="todo-card">
+            <h2>Заявки на ремонт та запчастини СТО</h2>
+            
+            <form id="todo-form" novalidate>
+                <label for="todo-text">Нове завдання</label>
+                <input id="todo-text" type="text" maxlength="100" autocomplete="off" placeholder="Введіть назву завдання..." />
+                
+                <select id="todo-category" aria-label="Категорія завдання">
+                    <option value="Замовлення" selected>Замовлення</option>
+                    <option value="Закупівля">Закупівля</option>
+                    <option value="Організаційне">Організаційне</option>
+                </select>
+                
+                <button type="submit">Додати</button>
+            </form>
+            
+            <p id="form-error" class="error" role="alert"></p>
+            
+            <div class="todo-controls">
+                <div class="filters" role="group" aria-label="Фільтр завдань">
+                    <button type="button" data-filter="all" class="is-active">Усі</button>
+                    <button type="button" data-filter="active">Активні</button>
+                    <button type="button" data-filter="done">Виконані</button>
+                </div>
+                <button type="button" id="clear-done">Очистити виконані</button>
+            </div>
+            
+            <ul id="todo-list"></ul>
+            <p id="todo-counter" aria-live="polite"></p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено.</p>
+    </footer>
+</body>
+</html>
