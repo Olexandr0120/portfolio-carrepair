@@ -136,7 +136,7 @@ function render() {
     }
 }
 
-// === Обробники подій ===
+//  Обробники подій 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     const text = input.value.trim();

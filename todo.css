@@ -1,4 +1,4 @@
-/* === Стилі компонента To-Do List (ЛР № 7) === */
+/*  Стилі компонента To-Do List  */
 .todo {
     max-width: 720px;
     margin: var(--spacing-lg, 24px) auto;
@@ -194,7 +194,7 @@
         margin-bottom: 5px;
     }
 
-    /* Кнопки та бейдж стають в один рядок під текстом */
+    
     #todo-list .meta {
         flex: 1 1 auto;
         margin-bottom: 5px;
@@ -205,7 +205,7 @@
         margin-top: 5px;
     }
 
-    /* Форма також стає в колонку */
+    /* Форма  стає в колонку */
     #todo-form {
         flex-direction: column;
         align-items: stretch;

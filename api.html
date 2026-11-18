@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Календар свят - ЛР8</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="api.css" />
+</head>
+<body>
+    <header>
+        <h1>Автосервіс МоторЛайн – Лабораторна робота № 8</h1>
+        <nav>
+            <a href="index.html">Головна (Портфоліо)</a>
+            <a href="dashboard.html">Дашборд</a>
+            <a href="lab6.html">Конвертер і каталог</a>
+            <a href="todo.html">Список задач</a>
+            <a href="api.html">Робота з API</a>
+        </nav>
+    </header>
+    
+    <main class="app">
+        <section id="api-section">
+            <h2 id="app-title">Календар офіційних вихідних і святкових днів для графіка СТО</h2>
+            
+            <form id="search-form" novalidate>
+                <label for="query-input" id="query-label">Рік та код країни (наприклад, 2026 UA)</label>
+                <input id="query-input" type="search" maxlength="20" autocomplete="off" placeholder="2026 UA" value="2026 UA" />
+                <button type="submit" id="submit-btn">Знайти</button>
+            </form>
+            
+            <p id="form-error" class="error" role="alert"></p>
+            
+            <div id="status" role="status" aria-live="polite"></div>
+            
+            <section id="result" aria-live="polite"></section>
+            
+            <div class="pagination-box">
+                <button type="button" id="load-more-btn" hidden>Показати ще</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено.</p>
+    </footer>
+    
+    <script src="api.js" defer></script>
+</body>
+</html>
