@@ -1,0 +1,167 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f4f6f8;
+  color: #1f2937;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+.app {
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.header h1 {
+  margin: 0;
+  color: #334155;
+  font-family: Georgia, serif;
+  border-bottom: 2px solid #334155;
+  padding-bottom: 8px;
+}
+.subtitle {
+  color: #6b7684;
+  margin: 4px 0 16px;
+  font-size: 0.9rem;
+}
+
+/* Форма */
+.todo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+}
+.todo-form label {
+  flex-basis: 100%;
+  font-weight: 600;
+}
+.todo-form input[type="text"] {
+  flex: 1 1 240px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.todo-form select {
+  flex: 0 1 160px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+/* Кнопки */
+button {
+  padding: 8px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+button:hover {
+  background: #f1f5f9;
+}
+.todo-form button[type="submit"] {
+  background: #334155;
+  color: #ffffff;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* Фільтри */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+.filters button.is-active {
+  background: #334155;
+  color: #ffffff;
+  border-color: transparent;
+}
+
+/* Список */
+.todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.todo-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+}
+.todo-list li input[type="checkbox"] {
+  accent-color: #334155;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.todo-list .text {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.todo-list li.is-done .text {
+  text-decoration: line-through;
+  color: #6b7684;
+}
+.todo-list .meta {
+  font-size: 0.8rem;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+.empty {
+  color: #6b7684;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+.counter {
+  font-weight: 600;
+  margin: 12px 0 0;
+}
+
+/* ProgressBar */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  background: #f8fafc;
+  padding: 8px 12px;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+}
+.progress__label {
+  min-width: 170px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.progress progress {
+  flex: 1;
+  height: 14px;
+  accent-color: #334155;
+}
