@@ -54,6 +54,8 @@ npm run dev
 ## Лабораторна робота № 10: React – стан, хуки та форми
 >>>>>>> 11f35084d17d1989dcf4751c5ec61f227b80486e
 
+## Лабораторна робота № 10: React – стан, хуки та форми
+
 - **Підпроєкт:** `todo-react/` (запуск: `cd todo-react`, `npm install`, `npm run dev`)
 - **Варіант №:** 18
 - **Параметри варіанта:**
@@ -91,6 +93,7 @@ todo-react/
 ```bash
 cd todo-react
 npm install
+<<<<<<< HEAD
 npm run dev
 ```
   ### Лабораторна робота № 11: Створення серверної частини на Node.js та Express
@@ -124,4 +127,8 @@ npm install
 npm run dev
 ```
 ---
+<<<<<<< Updated upstream
 npm run dev
+=======
+
+>>>>>>> Stashed changes
