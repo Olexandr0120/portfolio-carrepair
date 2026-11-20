@@ -1,20 +1,20 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import path from 'node:path';
+import Car from './models/Car.js';
+
+const PORT = process.env.PORT ?? 3018;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  console.error('Не задано MONGODB_URI. Створіть файл .env за зразком .env.example');
+  process.exit(1);
+}
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3018;
 
-// === Дані зберігаються в пам'яті процесу  ===
-const cars = [
-  { id: 1, brand: 'Toyota', model: 'Camry', year: 2020 },
-  { id: 2, brand: 'Honda', model: 'Civic', year: 2019 },
-  { id: 3, brand: 'BMW', model: 'X5', year: 2021 },
-  { id: 4, brand: 'Mercedes', model: 'E-Class', year: 2022 },
-  { id: 5, brand: 'Audi', model: 'A6', year: 2020 },
-];
-let nextId = cars.length + 1;
-
-// === Middleware логування: ТИП 2 (час ISO + метод + URL + статус-код) ===
+// === Middleware логування: ТИП 2 ===
+// Формат: час ISO + метод + URL + статус-код
 function logger(req, res, next) {
   res.on('finish', () => {
     console.log(
@@ -28,63 +28,42 @@ app.use(logger);
 app.use(express.json());
 app.use(express.static(path.join(import.meta.dirname, 'public')));
 
-// === Колекція: список (із пошуком ?q= за першим текстовим полем — brand) ===
-app.get('/api/cars', (req, res) => {
-  const { q } = req.query;
-  if (q) {
-    const search = String(q).trim().toLowerCase();
-    const result = cars.filter((c) =>
-      c.brand.toLowerCase().includes(search)
-    );
-    return res.json(result);
-  }
+// === Допоміжна функція: екранує спецсимволи регулярних виразів ===
+const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// === 1. Список із пошуком ?q= (за полем brand) та обмеженням ?limit= ===
+app.get('/api/cars', async (req, res) => {
+  const { q, limit } = req.query;
+  const filter = q
+    ? { brand: { $regex: escapeRegex(String(q)), $options: 'i' } }
+    : {};
+  const max = Math.min(Number(limit) || 50, 100);
+
+  const cars = await Car.find(filter).sort({ createdAt: -1 }).limit(max);
   res.json(cars);
 });
 
-// === Створення нового запису з валідацією полів та їхніх типів ===
-app.post('/api/cars', (req, res) => {
-  const { brand, model, year } = req.body ?? {};
-
-  if (
-    typeof brand !== 'string' ||
-    brand.trim() === '' ||
-    typeof model !== 'string' ||
-    model.trim() === ''
-  ) {
-    return res.status(400).json({
-      error: 'Поля brand і model є обов\'язковими і мають бути непорожніми рядками',
-    });
+// === 2. Один запис за ObjectId ===
+app.get('/api/cars/:id', async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ error: 'Некоректний формат id' });
   }
-
-  if (typeof year !== 'number' || !Number.isFinite(year) || year <= 0) {
-    return res.status(400).json({
-      error: 'Поле year є обов\'язковим і має бути додатним числом (тип number)',
-    });
-  }
-
-  const car = {
-    id: nextId++,
-    brand: brand.trim(),
-    model: model.trim(),
-    year,
-  };
-  cars.push(car);
-  res.status(201).json(car);
-});
-
-// === Один елемент за параметром маршруту :id ===
-app.get('/api/cars/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const car = cars.find((c) => c.id === id);
+  const car = await Car.findById(id);
   if (!car) {
-    return res.status(404).json({
-      error: `Автомобіль з id=${req.params.id} не знайдено`,
-    });
+    return res.status(404).json({ error: `Автомобіль з id=${id} не знайдено` });
   }
   res.json(car);
 });
 
-// === Навмисна помилка для перевірки обробника помилок (500) ===
+// === 3. Створення нового запису ===
+app.post('/api/cars', async (req, res) => {
+  const { brand, model, year } = req.body ?? {};
+  const car = await Car.create({ brand, model, year });
+  res.status(201).json(car);
+});
+
+// === Навмисна помилка для перевірки обробника 500 ===
 app.get('/api/error', () => {
   throw new Error('Тестова помилка сервера');
 });
@@ -97,7 +76,7 @@ app.use((req, res) => {
   });
 });
 
-// === Централізований обробник помилок  ===
+// === Централізований обробник помилок (4 параметри) — завжди останній ===
 app.use((err, req, res, next) => {
   console.error(err);
   if (err.type === 'entity.parse.failed') {
@@ -105,11 +84,29 @@ app.use((err, req, res, next) => {
       error: 'Некоректний JSON у тілі запиту',
     });
   }
+  if (err.name === 'ValidationError') {
+    const details = Object.values(err.errors).map((e) => e.message);
+    return res.status(400).json({
+      error: 'Дані не пройшли перевірку',
+      details,
+    });
+  }
   const status = err.status ?? 500;
   res.status(status).json({
     error: status === 500 ? 'Внутрішня помилка сервера' : err.message,
   });
 });
+
+// === Спочатку підключаємося до бази, і лише потім запускаємо сервер ===
+try {
+  await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
+  console.log(
+    `Підключено до MongoDB, база даних: ${mongoose.connection.name}`
+  );
+} catch (err) {
+  console.error('Не вдалося підключитися до MongoDB:', err.message);
+  process.exit(1);
+}
 
 app.listen(PORT, () => {
   console.log(`Сервер запущено: http://localhost:${PORT}`);

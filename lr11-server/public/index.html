@@ -111,29 +111,42 @@
         <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено. | Роздано Express-сервером на порту 3018</p>
     </footer>
 
-    <!-- Інтеграція фронтенду з Express API (ЛР11) -->
+    <!-- Інтеграція фронтенду з Express API -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const list = document.getElementById('cars-list');
-            fetch('/api/cars')
-                .then((response) => {
-                    if (!response.ok) throw new Error('Статус: ' + response.status);
-                    return response.json();
-                })
-                .then((cars) => {
-                    list.innerHTML = cars.map((car) => `
-                        <article>
-                            <h3>${car.brand} ${car.model}</h3>
-                            <p>Рік випуску: ${car.year}</p>
-                            <p>ID замовлення: ${car.id}</p>
-                        </article>
-                    `).join('');
-                })
-                .catch((err) => {
-                    list.innerHTML = `<p>Помилка завантаження: ${err.message}</p>`;
-                });
-        });
-    </script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const list = document.getElementById('cars-list');
+    
+    fetch('/api/cars')
+      .then((response) => {
+        if (!response.ok) throw new Error('Статус: ' + response.status);
+        return response.json();
+      })
+      .then((cars) => {
+        list.innerHTML = cars.map((car) => `
+          <article style="cursor: pointer; transition: transform 0.2s;" 
+                   onclick="showCarDetails('${car.id}')">
+            <h3>${car.brand} ${car.model}</h3>
+            <p>Рік випуску: ${car.year}</p>
+            <p>ID замовлення: ${car.id}</p>
+          </article>
+        `).join('');
+      })
+      .catch((err) => {
+        list.innerHTML = `<p>Помилка завантаження: ${err.message}</p>`;
+      });
+  });
+
+  function showCarDetails(id) {
+    fetch(`/api/cars/${id}`)
+      .then((response) => response.json())
+      .then((car) => {
+        alert(`Деталі автомобіля:\n\n${car.brand} ${car.model}\nРік: ${car.year}\nСтворено: ${new Date(car.createdAt).toLocaleString('uk-UA')}\nОновлено: ${new Date(car.updatedAt).toLocaleString('uk-UA')}`);
+      })
+      .catch((err) => {
+        alert('Помилка: ' + err.message);
+      });
+  }
+</script>
 
 </body>
 </html>
