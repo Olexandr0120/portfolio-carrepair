@@ -1,5 +1,11 @@
 export const CATEGORIES = ["Замовлення", "Закупівля", "Організаційне"];
 
+export const CATEGORY_KINDS = {
+  "Замовлення": "high",
+  "Закупівля": "medium",
+  "Організаційне": "low"
+};
+
 export const initialTodos = [
   { id: 1, text: "Замовити гальмівні колодки, комплект P06071", done: true, category: "Замовлення" },
   { id: 2, text: "Купити моторну оливу 5W-30 (30 літрів)", done: true, category: "Закупівля" },
