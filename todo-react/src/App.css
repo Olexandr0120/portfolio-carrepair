@@ -1,0 +1,220 @@
+:root {
+  --color-accent: #334155;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background-color: #f4f6f8;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.app {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.app-header {
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--color-accent);
+  font-family: Georgia, serif;
+}
+
+.app-subtitle {
+  margin: 0.25rem 0 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* Форма */
+.todo-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.todo-form-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.todo-form-row input {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.55rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+button:hover { background-color: #e2e8f0; }
+
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.todo-form-row button[type='submit'] {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.todo-form-row button[type='submit']:hover { opacity: 0.92; }
+
+.form-error {
+  color: #b91c1c;
+  font-size: 0.9rem;
+  margin: 0.35rem 0 0;
+}
+
+/* Фільтри */
+.todo-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0;
+}
+
+.todo-filters input {
+  flex: 1 1 220px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.filter-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+/* Лічильник */
+.counter {
+  color: #475569;
+  font-size: 0.95rem;
+  margin: 0.75rem 0;
+  font-weight: 600;
+}
+
+/* Список */
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: grid;
+  gap: 8px;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.todo-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.todo-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.todo-title { flex: 1; }
+.todo-title.done {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.todo-badge {
+  font-size: 0.8rem;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.todo-delete {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+
+.todo-delete:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Стани */
+.status, .empty {
+  padding: 1.25rem;
+  text-align: center;
+  color: #475569;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.status-error {
+  background-color: #fee2e2;
+  color: #7f1d1d;
+  border: 1px solid #fecaca;
+}
+
+.reload-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .app { margin: 0; border-radius: 0; padding: 1rem; }
+  .todo-form-row { flex-direction: column; }
+  .filter-group { width: 100%; }
+  .filter-btn { flex: 1; }
+}
