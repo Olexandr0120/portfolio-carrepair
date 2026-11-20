@@ -1,9 +1,10 @@
-import TodoItem from "./TodoItem.jsx";
+import TodoItem from './TodoItem.jsx';
 
 function TodoList({ todos, onToggle, onDelete }) {
   if (todos.length === 0) {
-    return <p className="empty">Завдань немає</p>;
+    return <p className="empty">Завдань, що відповідають умовам, не знайдено.</p>;
   }
+
   return (
     <ul className="todo-list">
       {todos.map((todo) => (
@@ -17,4 +18,5 @@ function TodoList({ todos, onToggle, onDelete }) {
     </ul>
   );
 }
+
 export default TodoList;
