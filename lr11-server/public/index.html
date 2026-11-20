@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфоліо - СТО та автосервіс</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Автосервіс МоторЛайн</h1>
+        <nav>
+            <a href="#about">Про нас</a>
+            <a href="#projects">Проєкти</a>
+            <a href="#cars">Автопарк</a>
+            <a href="#contact">Контакти</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>Про нас</h2>
+            <img src="servis.jpg" alt="Сучасний цех автосервісу МоторЛайн із підйомниками та автомобілями в роботі" width="400">
+            <p>
+                Привіт! Ми — команда автосервісу «МоторЛайн», яка спеціалізується 
+                на комп'ютерній діагностиці, ремонті двигунів та ходової частини 
+                автомобілів. На цьому сайті ми ділимося інформацією про наші послуги, 
+                досвід роботи та допомагаємо клієнтам підтримувати автівки в ідеальному стані.
+            </p>
+            <ul>
+                <li>Комп'ютерна діагностика та ремонт електроніки</li>
+                <li>Ремонт ходової частини, підвіски та гальмівних систем</li>
+                <li>Регламентне технічне обслуговування та заміна мастила</li>
+            </ul>
+        </section>
+
+        <section id="projects">
+            <h2>Проєкти</h2>
+            <div class="projects-list">
+                <article>
+                    <h3>Комп'ютерна діагностика</h3>
+                    <p>Повна перевірка електронних систем автомобіля, зчитування та розшифровка кодів помилок. Використовуємо професійні сканери Launch та Autel.</p>
+                </article>
+                <article>
+                    <h3>Ремонт ходової частини</h3>
+                    <p>Заміна амортизаторів, пружин, важелів та сайлентблоків. Працюємо на підйомниках з використанням спецінструменту та оригінальних запчастин.</p>
+                </article>
+                <article>
+                    <h3>Заміна мастила та ТО</h3>
+                    <p>Регламентна заміна моторної оливи, фільтрів та технічних рідин. Використовуємо тільки сертифіковані витратні матеріали від перевірених брендів.</p>
+                </article>
+                <article>
+                    <h3>Ремонт електроніки</h3>
+                    <p>Відновлення блоків управління, ремонт проводки та усунення несправностей в електронних системах комфорту автомобіля.</p>
+                </article>
+                <article>
+                    <h3>Шиномонтаж та балансування</h3>
+                    <p>Сезонна заміна шин, професійне балансування коліс та ремонт проколів на сучасному обладнанні.</p>
+                </article>
+                <article>
+                    <h3>Підготовка до техогляду</h3>
+                    <p>Комплексна перевірка всіх систем авто перед проходженням державного технічного огляду та усунення виявлених недоліків.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Нова секція: автопарк з API (ЛР11) -->
+        <section id="cars">
+            <h2>Автопарк у роботі (дані з API)</h2>
+            <p>Цей список завантажується динамічно з <code>GET /api/cars</code>:</p>
+            <div class="projects-list" id="cars-list">
+                <p>Завантаження даних з сервера…</p>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Контакти</h2>
+            <p>Залиште заявку на ремонт — і ми зв'яжемося з вами найближчим часом!</p>
+
+            <form action="#" method="post">
+                <div class="form-row">
+                    <div>
+                        <label for="name">Ім'я *</label>
+                        <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                    </div>
+                    <div>
+                        <label for="email">Електронна пошта *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <label for="topic">Тема звернення *</label>
+                <select id="topic" name="topic" required>
+                    <option value="" disabled selected>Оберіть тему</option>
+                    <option value="diagnostics">Комп'ютерна діагностика</option>
+                    <option value="repair">Ремонт ходової</option>
+                    <option value="maintenance">Заміна мастила / ТО</option>
+                    <option value="other">Інше питання</option>
+                </select>
+
+                <label for="message">Повідомлення *</label>
+                <textarea id="message" name="message" required maxlength="500" rows="5"></textarea>
+
+                <button type="submit">Надіслати</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Варакута О.О. Автосервіс МоторЛайн. Усі права захищено. | Роздано Express-сервером на порту 3018</p>
+    </footer>
+
+    <!-- Інтеграція фронтенду з Express API (ЛР11) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const list = document.getElementById('cars-list');
+            fetch('/api/cars')
+                .then((response) => {
+                    if (!response.ok) throw new Error('Статус: ' + response.status);
+                    return response.json();
+                })
+                .then((cars) => {
+                    list.innerHTML = cars.map((car) => `
+                        <article>
+                            <h3>${car.brand} ${car.model}</h3>
+                            <p>Рік випуску: ${car.year}</p>
+                            <p>ID замовлення: ${car.id}</p>
+                        </article>
+                    `).join('');
+                })
+                .catch((err) => {
+                    list.innerHTML = `<p>Помилка завантаження: ${err.message}</p>`;
+                });
+        });
+    </script>
+
+</body>
+</html>
