@@ -24,6 +24,12 @@ const carSchema = new mongoose.Schema(
       max: [2100, 'year: не більше 2100'],
       cast: 'year: значення має бути числом',
     },
+    problem: {
+      type: String,
+      trim: true,
+      maxlength: [500, 'problem: не більше 500 символів'],
+      default: '',
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

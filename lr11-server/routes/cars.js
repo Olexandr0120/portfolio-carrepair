@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const router = Router();
 
-const FIELDS = ['brand', 'model', 'year'];
+const FIELDS = ['brand', 'model', 'year', 'problem'];
 const SORT_FIELDS = ['model', 'year', 'createdAt'];
 
 const pick = (body) =>
@@ -43,13 +43,23 @@ function requireOwnerOrAdmin(req, res, next) {
 }
 
 // Ланцюжки middleware
-const withCar = [validateId, findCar];
+const withCar = [requireAuth, validateId, findCar];
 const ownCar = [requireAuth, validateId, findCar, requireOwnerOrAdmin];
 // Тип 2: DELETE лише для адміністратора
 const adminDeleteCar = [requireAuth, validateId, findCar, requireRole('admin')];
 
-// === GET /api/cars — Список (публічний) ===
-router.get('/', async (req, res) => {
+function validateProblem(problem) {
+  if (typeof problem !== 'string' || problem.trim().length < 3) {
+    return 'Опишіть проблему щонайменше 3 символами';
+  }
+  if (problem.trim().length > 500) {
+    return 'Опис проблеми не може перевищувати 500 символів';
+  }
+  return null;
+}
+
+// === GET /api/cars — Список (потрібен вхід, бо містить скарги клієнтів) ===
+router.get('/', requireAuth, async (req, res) => {
   const { q, brand, sort = '-createdAt' } = req.query;
   const page = Math.max(Number.parseInt(req.query.page) || 1, 1);
   const limit = Math.min(Math.max(Number.parseInt(req.query.limit) || 10, 1), 100);
@@ -89,13 +99,24 @@ router.get('/:id', withCar, (req, res) => {
 
 // === POST /api/cars — Створення (owner береться з токена!) ===
 router.post('/', requireAuth, async (req, res) => {
-  const car = await Car.create({ ...pick(req.body), owner: req.user._id });
+  const problemError = validateProblem(req.body?.problem);
+  if (problemError) return res.status(400).json({ error: problemError });
+  const car = await Car.create({
+    ...pick(req.body),
+    problem: req.body.problem.trim(),
+    owner: req.user._id,
+  });
   res.status(201).location(`${req.baseUrl}/${car.id}`).json(car);
 });
 
 // === PUT /api/cars/:id — Повна заміна (лише власник або адмін) ===
 router.put('/:id', ownCar, async (req, res) => {
   const data = pick(req.body);
+  if (data.problem !== undefined) {
+    const problemError = validateProblem(data.problem);
+    if (problemError) return res.status(400).json({ error: problemError });
+    data.problem = data.problem.trim();
+  }
   req.car.set(Object.fromEntries(FIELDS.map((f) => [f, data[f]])));
   await req.car.save();
   res.json(req.car);
@@ -106,6 +127,11 @@ router.patch('/:id', ownCar, async (req, res) => {
   const data = pick(req.body);
   if (Object.keys(data).length === 0) {
     return res.status(400).json({ error: `Передайте хоча б одне з полів: ${FIELDS.join(', ')}` });
+  }
+  if (data.problem !== undefined) {
+    const problemError = validateProblem(data.problem);
+    if (problemError) return res.status(400).json({ error: problemError });
+    data.problem = data.problem.trim();
   }
   req.car.set(data);
   await req.car.save();

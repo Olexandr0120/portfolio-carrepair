@@ -157,6 +157,14 @@ function Cars({ user }) {
     brand: '',
     model: '',
     year: '',
+    problem: '',
+  });
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({
+    brand: '',
+    model: '',
+    year: '',
+    problem: '',
   });
 
   const [error, setError] = useState('');
@@ -230,6 +238,7 @@ function Cars({ user }) {
         brand: form.brand.trim(),
         model: form.model.trim(),
         year: Number(form.year),
+        problem: form.problem.trim(),
       };
 
       await request('/api/cars', {
@@ -242,6 +251,7 @@ function Cars({ user }) {
         brand: '',
         model: '',
         year: '',
+        problem: '',
       });
 
       // Після додавання повертаємося
@@ -253,6 +263,41 @@ function Cars({ user }) {
       } else {
         reload();
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function startEdit(car) {
+    setEditingId(car.id);
+    setEditForm({
+      brand: car.brand,
+      model: car.model,
+      year: String(car.year),
+      problem: car.problem ?? '',
+    });
+    setError('');
+  }
+
+  async function saveEdit(e, id) {
+    e.preventDefault();
+    setError('');
+    setSaving(true);
+
+    try {
+      await request(`/api/cars/${id}`, {
+        method: 'PATCH',
+        body: {
+          brand: editForm.brand.trim(),
+          model: editForm.model.trim(),
+          year: Number(editForm.year),
+          problem: editForm.problem.trim(),
+        },
+      });
+      setEditingId(null);
+      reload();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -287,6 +332,7 @@ function Cars({ user }) {
   // видаляти записи може лише адміністратор.
   // Сервер також перевіряє роль користувача.
   const canDelete = user.role === 'admin';
+  const currentUserId = user.id ?? user._id;
 
   // Розраховуємо загальну кількість сторінок.
   const pageCount = Math.max(
@@ -350,6 +396,22 @@ function Cars({ user }) {
           required
         />
 
+        <textarea
+          className="form-wide"
+          placeholder="З якою проблемою звернулися до СТО?"
+          value={form.problem}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              problem: e.target.value,
+            }))
+          }
+          minLength={3}
+          maxLength={500}
+          rows={3}
+          required
+        />
+
         <button type="submit" disabled={saving}>
           {saving ? 'Додавання…' : 'Додати автомобіль'}
         </button>
@@ -384,21 +446,107 @@ function Cars({ user }) {
         <ul className="list">
           {items.map((car) => (
             <li key={car.id}>
-              <span>
-                <strong>
-                  {car.brand} {car.model}
-                </strong>
-                {' '}— {car.year} рік
-              </span>
-
-              {canDelete && (
-                <button
-                  type="button"
-                  className="link"
-                  onClick={() => remove(car.id)}
+              {editingId === car.id ? (
+                <form
+                  className="car-edit-form"
+                  onSubmit={(e) => saveEdit(e, car.id)}
                 >
-                  Видалити
-                </button>
+                  <div className="row">
+                    <input
+                      aria-label="Марка автомобіля"
+                      value={editForm.brand}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({ ...prev, brand: e.target.value }))
+                      }
+                      minLength={2}
+                      maxLength={100}
+                      required
+                    />
+                    <input
+                      aria-label="Модель автомобіля"
+                      value={editForm.model}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({ ...prev, model: e.target.value }))
+                      }
+                      minLength={2}
+                      maxLength={100}
+                      required
+                    />
+                    <input
+                      aria-label="Рік випуску"
+                      type="number"
+                      value={editForm.year}
+                      onChange={(e) =>
+                        setEditForm((prev) => ({ ...prev, year: e.target.value }))
+                      }
+                      min={1886}
+                      max={2100}
+                      step={1}
+                      required
+                    />
+                  </div>
+                  <textarea
+                    aria-label="Проблема автомобіля"
+                    placeholder="З якою проблемою звернулися до СТО?"
+                    value={editForm.problem}
+                    onChange={(e) =>
+                      setEditForm((prev) => ({ ...prev, problem: e.target.value }))
+                    }
+                    minLength={3}
+                    maxLength={500}
+                    rows={3}
+                    required
+                  />
+                  <div className="row car-actions">
+                    <button type="submit" disabled={saving}>
+                      {saving ? 'Збереження…' : 'Зберегти'}
+                    </button>
+                    <button
+                      type="button"
+                      className="link"
+                      onClick={() => setEditingId(null)}
+                    >
+                      Скасувати
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <div className="car-info">
+                    <div>
+                      <strong>
+                        {car.brand} {car.model}
+                      </strong>
+                      {' '}— {car.year} рік
+                    </div>
+                    {car.problem && (
+                      <p className="car-problem">
+                        <strong>Проблема:</strong> {car.problem}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="car-actions">
+                    {(canDelete || String(car.owner) === String(currentUserId)) && (
+                      <button
+                        type="button"
+                        className="link"
+                        onClick={() => startEdit(car)}
+                      >
+                        Редагувати
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        type="button"
+                        className="link"
+                        onClick={() => remove(car.id)}
+                      >
+                        Видалити
+                      </button>
+                    )}
+                  </div>
+                </>
               )}
             </li>
           ))}
