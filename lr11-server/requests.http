@@ -1,0 +1,62 @@
+@host = http://localhost:3018
+@id = 6b00cea9982cc59c1fe3401d
+
+### 1. Список записів (GET -> 200)
+GET {{host}}/api/cars?limit=5&sort=-year
+
+### 2. Створення нового запису (POST -> 201 Created)
+POST {{host}}/api/cars
+Content-Type: application/json
+
+{
+  "brand": "Volkswagen",
+  "model": "Golf",
+  "year": 2023
+}
+
+### 3. Отримання одного запису (GET -> 200)
+GET {{host}}/api/cars/{{id}}
+
+### 4. Повна заміна запису (PUT -> 200)
+PUT {{host}}/api/cars/{{id}}
+Content-Type: application/json
+
+{
+  "brand": "Volkswagen",
+  "model": "Golf GTI",
+  "year": 2024
+}
+
+### 5. Часткове оновлення (PATCH -> 200)
+PATCH {{host}}/api/cars/{{id}}
+Content-Type: application/json
+
+{
+  "year": 2025
+}
+
+### 6. Видалення запису (DELETE -> 204 No Content)
+DELETE {{host}}/api/cars/{{id}}
+
+### 7. Перевірка валідації схеми (POST -> 400 Bad Request)
+POST {{host}}/api/cars
+Content-Type: application/json
+
+{
+  "brand": "A",
+  "model": "",
+  "year": 1800
+}
+
+### 8. Перевірка унікального індексу (POST -> 409 Conflict)
+# Виконай цей запит двічі, щоб отримати 409
+POST {{host}}/api/cars
+Content-Type: application/json
+
+{
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2010
+}
+### 9. Некоректний формат id (GET -> 400)
+GET {{host}}/api/cars/abc

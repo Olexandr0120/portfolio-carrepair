@@ -15,6 +15,7 @@ const carSchema = new mongoose.Schema(
       trim: true,
       minlength: [2, 'model: щонайменше 2 символи'],
       maxlength: [100, 'model: не більше 100 символів'],
+      unique: true,
     },
     year: {
       type: Number,
