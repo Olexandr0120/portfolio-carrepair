@@ -1,21 +1,18 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
 import Car from '../models/Car.js';
+import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const router = Router();
 
-// Білий список полів для POST/PUT/PATCH (захист від Mass Assignment)
 const FIELDS = ['brand', 'model', 'year'];
-// Дозволені поля для сортування (варіант 18)
 const SORT_FIELDS = ['model', 'year', 'createdAt'];
 
-// Допоміжна функція: беремо лише дозволені поля з тіла запиту
 const pick = (body) =>
   Object.fromEntries(
     FIELDS.filter((f) => body?.[f] !== undefined).map((f) => [f, body[f]])
   );
 
-// Екранування спецсимволів для регулярних виразів
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Middleware 1: перевірка формату ObjectId
@@ -26,7 +23,7 @@ function validateId(req, res, next) {
   next();
 }
 
-// Middleware 2: пошук автомобіля та збереження в req.car
+// Middleware 2: пошук автомобіля
 async function findCar(req, res, next) {
   const car = await Car.findById(req.params.id);
   if (!car) {
@@ -36,27 +33,37 @@ async function findCar(req, res, next) {
   next();
 }
 
-const withCar = [validateId, findCar];
+// Middleware 3: лише власник або адмін можуть редагувати (PUT/PATCH)
+function requireOwnerOrAdmin(req, res, next) {
+  const isOwner = req.car.owner?.equals(req.user._id);
+  if (!isOwner && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Змінювати запис може лише його власник або адміністратор' });
+  }
+  next();
+}
 
-// === GET /api/cars — Список з фільтрацією, сортуванням та пагінацією ===
+// Ланцюжки middleware
+const withCar = [validateId, findCar];
+const ownCar = [requireAuth, validateId, findCar, requireOwnerOrAdmin];
+// Тип 2: DELETE лише для адміністратора
+const adminDeleteCar = [requireAuth, validateId, findCar, requireRole('admin')];
+
+// === GET /api/cars — Список (публічний) ===
 router.get('/', async (req, res) => {
   const { q, brand, sort = '-createdAt' } = req.query;
   const page = Math.max(Number.parseInt(req.query.page) || 1, 1);
   const limit = Math.min(Math.max(Number.parseInt(req.query.limit) || 10, 1), 100);
 
-  // Валідація поля сортування
   const sortName = String(sort);
   const sortField = sortName.replace(/^-/, '');
   if (!SORT_FIELDS.includes(sortField)) {
     return res.status(400).json({ error: `sort: допустимі поля ${SORT_FIELDS.join(', ')}` });
   }
 
-  // Формування фільтра (пошук ?q= та точний фільтр ?brand=)
   const filter = {};
   if (q) filter.brand = { $regex: escapeRegex(String(q)), $options: 'i' };
   if (brand) filter.brand = String(brand);
 
-  // Паралельне виконання: отримання сторінки + підрахунок загальної кількості
   const [items, total] = await Promise.all([
     Car.find(filter)
       .sort({ [sortField]: sortName.startsWith('-') ? -1 : 1, _id: 1 })
@@ -69,28 +76,33 @@ router.get('/', async (req, res) => {
   res.json(items);
 });
 
+// === GET /api/cars/mine — Тільки свої записи (ПОВИНЕН бути ПЕРЕД /:id!) ===
+router.get('/mine', requireAuth, async (req, res) => {
+  const items = await Car.find({ owner: req.user._id }).sort({ createdAt: -1 });
+  res.json(items);
+});
+
 // === GET /api/cars/:id — Один запис ===
 router.get('/:id', withCar, (req, res) => {
   res.json(req.car);
 });
 
-// === POST /api/cars — Створення ===
-router.post('/', async (req, res) => {
-  const car = await Car.create(pick(req.body));
+// === POST /api/cars — Створення (owner береться з токена!) ===
+router.post('/', requireAuth, async (req, res) => {
+  const car = await Car.create({ ...pick(req.body), owner: req.user._id });
   res.status(201).location(`${req.baseUrl}/${car.id}`).json(car);
 });
 
-// === PUT /api/cars/:id — Повна заміна ===
-router.put('/:id', withCar, async (req, res) => {
+// === PUT /api/cars/:id — Повна заміна (лише власник або адмін) ===
+router.put('/:id', ownCar, async (req, res) => {
   const data = pick(req.body);
-  // Очищаємо всі дозволені поля, навіть якщо їх немає в тілі запиту
   req.car.set(Object.fromEntries(FIELDS.map((f) => [f, data[f]])));
   await req.car.save();
   res.json(req.car);
 });
 
-// === PATCH /api/cars/:id — Часткове оновлення ===
-router.patch('/:id', withCar, async (req, res) => {
+// === PATCH /api/cars/:id — Часткове оновлення (лише власник або адмін) ===
+router.patch('/:id', ownCar, async (req, res) => {
   const data = pick(req.body);
   if (Object.keys(data).length === 0) {
     return res.status(400).json({ error: `Передайте хоча б одне з полів: ${FIELDS.join(', ')}` });
@@ -100,8 +112,8 @@ router.patch('/:id', withCar, async (req, res) => {
   res.json(req.car);
 });
 
-// === DELETE /api/cars/:id — Видалення ===
-router.delete('/:id', withCar, async (req, res) => {
+// === DELETE /api/cars/:id — ТИП 2: лише адміністратор ===
+router.delete('/:id', adminDeleteCar, async (req, res) => {
   await req.car.deleteOne();
   res.status(204).end();
 });

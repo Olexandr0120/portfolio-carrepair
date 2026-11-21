@@ -8,14 +8,16 @@
     "start": "node server.js",
     "dev": "node --watch --env-file=.env server.js",
     "seed": "node --env-file=.env seed.js",
-    "check": "node --env-file=.env scripts/check-api.mjs"
+    "check": "node --env-file=.env scripts/check-auth.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.12.2"
   }
 }
