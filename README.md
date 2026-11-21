@@ -148,7 +148,6 @@ npm run dev
 - `GET /api/cars?q=toyota` → 1 запис (латиниця)
 - `GET /api/cars?q=TOYOTA` → 1 запис (регістр не враховується)
 - `GET /api/cars?q=ауді` → 1 запис (кирилиця працює)
-
 ---
 ## Лабораторна робота № 13: REST API з CRUD-операціями
 
@@ -172,6 +171,7 @@ npm run dev
 | PATCH  | `/api/cars/:id`  | Часткове оновлення                                        | 200   | 400, 404, 409, 413   |
 | DELETE | `/api/cars/:id`  | Видалення                                                 | 204   | 400, 404             |
 
+<<<<<<< HEAD
 ### Параметри списку (`GET /api/cars`)
 
 - `q` — пошук за полем `brand` (без урахування регістру, з екрануванням спецсимволів через `escapeRegex`).
@@ -208,3 +208,43 @@ lr11-server/
 ├── requests.http
 ├── seed.js
 └── server.js
+```
+--- 
+### Команди
+- Встановлення залежностей: `npm install`
+- Наповнення бази: `npm run seed`
+- Запуск сервера: `npm run dev`
+- Автоматична перевірка API: `npm run check` (15 тестів)
+---
+## Лабораторна робота № 14: Автентифікація та авторизація (JWT)
+
+- **Директорія сервера:** `lr11-server/`
+- **Порт:** 3018
+- **База даних:** MongoDB (колекції `users`, `cars`)
+- **Алгоритм токена:** HS256, TTL = 7200 секунд (2 години) — варіант 18
+- **Тип авторизації:** Тип 2 — видаляти записи (`DELETE /api/cars/:id`) може лише адміністратор
+
+### Ендпоінти
+
+| Метод | Шлях | Доступ |
+|---|---|---|
+| POST | `/api/auth/register` | Публічний |
+| POST | `/api/auth/login` | Публічний |
+| GET | `/api/auth/me` | Автентифікований |
+| GET | `/api/auth/users` | Лише admin |
+| GET | `/api/cars` | Публічний |
+| GET | `/api/cars/mine` | Автентифікований |
+| POST | `/api/cars` | Автентифікований (owner з токена) |
+| PUT/PATCH | `/api/cars/:id` | Власник або admin |
+| DELETE | `/api/cars/:id` | Лише admin (Тип 2) |
+
+### Запуск
+
+```bash
+cd lr11-server
+npm install
+npm run seed
+npm run dev
+npm run check
+>>>>>>> 514c734 (ЛР14: реєстрація, вхід, bcrypt, JWT, приватні маршрути, ролі)
+```

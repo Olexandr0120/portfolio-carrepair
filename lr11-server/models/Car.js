@@ -24,6 +24,12 @@ const carSchema = new mongoose.Schema(
       max: [2100, 'year: не більше 2100'],
       cast: 'year: значення має бути числом',
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+     required: [true, 'У запису має бути власник'],
+     index: true,
+    },
   },
   {
     timestamps: true, // Автоматично додає createdAt та updatedAt

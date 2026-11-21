@@ -1,0 +1,105 @@
+# REST Client (VS Code). Спочатку надішліть запит «Вхід» — токен підставиться автоматично.
+# Якщо підстановка не спрацювала, скопіюйте токен із відповіді й вставте замість виразу після @token=
+
+@host = http://localhost:3018
+@token = {{login.response.body.$.token}}
+
+### 1. Реєстрація нового користувача (201 Created)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Тестовий користувач",
+  "email": "test@example.com",
+  "password": "Passw0rd!"
+}
+
+### 2. Вхід як alice (200 OK із JWT-токеном)
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "Passw0rd!"
+}
+
+### 3. Вхід з хибним паролем (401 Unauthorized)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "WrongPassword!"
+}
+
+### 4. Профіль поточного користувача (приватний маршрут, 200 OK)
+GET {{host}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### 5. Мої записи (приватний маршрут, 200 OK)
+GET {{host}}/api/cars/mine
+Authorization: Bearer {{token}}
+
+### 6. Створення запису з токеном (201 Created)
+POST {{host}}/api/cars
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "brand": "Volkswagen",
+  "model": "Passat",
+  "year": 2021
+}
+
+### 7. Створення запису БЕЗ токена (401 Unauthorized)
+POST {{host}}/api/cars
+Content-Type: application/json
+
+{
+  "brand": "Volkswagen",
+  "model": "Passat",
+  "year": 2021
+}
+
+### 8. Список користувачів як звичайний користувач (403 Forbidden)
+GET {{host}}/api/auth/users
+Authorization: Bearer {{token}}
+
+### 9. Вхід як адміністратор
+# @name adminLogin
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Passw0rd!"
+}
+
+### 10. Список користувачів як адміністратор (200 OK)
+GET {{host}}/api/auth/users
+Authorization: Bearer {{adminLogin.response.body.$.token}}
+
+### 11. Отримати ID запису Аліси для тестування Типу 2
+GET {{host}}/api/cars/mine
+Authorization: Bearer {{token}}
+
+### Вхід як bob (для тестування Типу 2)
+# @name bobLogin
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "bob@example.com",
+  "password": "Passw0rd!"
+}
+
+### 12. Спроба видалити ЗАПИС АЛІСИ як БОГДАН (403 Forbidden — Тип 2!)
+@bobToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3OTUyNTMzNTEsImV4cCI6MTc5NTI2MDU1MSwic3ViIjoiNmIwMTU5NDQ3ZWFkNjY3ZDYzZGNmYWM2In0.q3qkIqht8Rxgy53otoWcSx9_iEqLCOcmP8H-7GgdVu0
+@aliceCarId = 6b0159447ead667d63dcfac7
+DELETE {{host}}/api/cars/{{aliceCarId}}
+Authorization: Bearer {{bobToken}}
+
+### 13. Видалення запису Аліси як АДМІНІСТРАТОР (204 No Content — Тип 2!)
+DELETE {{host}}/api/cars/{{aliceCarId}}
+Authorization: Bearer {{adminLogin.response.body.$.token}}
